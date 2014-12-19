@@ -9,7 +9,7 @@ The Blipfoto SDK for PHP lets you integreate easily with the Blipfoto API.
 
 ## Installation
 
-To install the SDK, we recommend using [Composer](). Just add the following to your `composer.json` file and run `composer update`:
+To install the SDK, we recommend using [Composer](https://getcomposer.org/). Just add the following to your `composer.json` file and run `composer update`:
 
 	{
 		"require": {
@@ -17,7 +17,7 @@ To install the SDK, we recommend using [Composer](). Just add the following to y
 		}
 	}
 
-Alternatively, you can clone the [GitHub repository]() and add the classes to your own auto-loader. 
+Alternatively, you can clone the [GitHub repository](https://github.com/Blipfoto/php-sdk) and add the classes to your own auto-loader. 
 
 ## Basic usage
 
@@ -36,7 +36,7 @@ The client's `get()`, `post()`, `put()` and `delete()` methods all accept a reso
 	
 The `data()` method returns an array, the contents of which depends on the resource being called. Note you can pass a period-separated key to `data()` for quick access to an item in the array:
 
-	echp $response->data('user.username');	//=> 'arya'
+	echo $response->data('user.username');	//=> 'arya'
 
 ### Exceptions
 

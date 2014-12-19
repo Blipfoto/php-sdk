@@ -13,11 +13,11 @@ To install the SDK, we recommend using [Composer](https://getcomposer.org/). Jus
 
 	{
 		"require": {
-			"blipfoto/blipfoto-php-sdk" : "1.0.*"
+			"blipfoto/blipfoto": "dev-master"
 		}
 	}
 
-Alternatively, you can clone the [GitHub repository](https://github.com/Blipfoto/php-sdk) and add the classes to your own auto-loader. 
+Alternatively, you can clone the [GitHub repository](https://github.com/Blipfoto/php-sdk) and add the classes using your own auto-loader.
 
 ## Basic usage
 

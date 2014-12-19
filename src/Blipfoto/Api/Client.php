@@ -2,7 +2,6 @@
 
 namespace Blipfoto\Api;
 
-use \ReflectionClass;
 use Blipfoto\Exceptions\ApiResponseException;
 use Blipfoto\Exceptions\OAuthException;
 use Blipfoto\Traits\Helper;

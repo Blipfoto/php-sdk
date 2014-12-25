@@ -78,9 +78,10 @@ class Response {
 	}
 
 	/**
-	 * Return the response's rate limit info array, or a key from the array.
+	 * Return the response's rate limit info array, a key from the array, or null if the info or key does not exist.
 	 *
-	 * @return array
+	 * @param string $key (optional)
+	 * @return mixed
 	 */
 	public function rateLimit($key = null) {
 		return $key ? (isset($this->rate_limit[$key]) ? $this->rate_limit[$key] : null) : $this->rate_limit;

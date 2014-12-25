@@ -43,7 +43,7 @@ class Client {
 	 * Get and optionally set the id.
 	 *
 	 * @param string $id (optional)
-	 * @param return string
+	 * @return string
 	 */
 	public function id() {
 		return $this->getset('id', func_get_args());
@@ -53,7 +53,7 @@ class Client {
 	 * Get and optionally set the secret.
 	 *
 	 * @param string $secret (optional)
-	 * @param return string
+	 * @return string
 	 */
 	public function secret() {
 		return $this->getset('secret', func_get_args());
@@ -63,7 +63,7 @@ class Client {
 	 * Get and optionally set the user access token.
 	 *
 	 * @param string $access_token (optional)
-	 * @param return string
+	 * @return string
 	 */
 	public function accessToken() {
 		return $this->getset('access_token', func_get_args());

@@ -69,7 +69,8 @@ class Request {
 	 * Get and optionally set a header.
 	 *
 	 * @param string $name
-	 * @param mixed $valiue (optional)
+	 * @param mixed $value (optional)
+	 * @return mixed
 	 */
 	public function header() {
 		$args = func_get_args();
@@ -159,7 +160,6 @@ class Request {
 	 * Set the bearer token for authorization.
 	 *
 	 * @param string $token
-	 * @return void
 	 **/
 	protected function setBearerToken($token) {
 		$this->header('Authorization', 'Bearer ' . $token);

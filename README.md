@@ -21,9 +21,9 @@ Alternatively, you can clone the [GitHub repository](https://github.com/Blipfoto
 
 ## Basic usage
 
-Create a `blipfoto\api\Client` instance, passing in your app's `client_id` and `client_secret`:
+Create a `Blipfoto\Api\Client` instance, passing in your app's `client_id` and `client_secret`:
 
-	use blipfoto\api\Client;
+	use Blipfoto\Api\Client;
 	
 	$client = new Client('abcd', '1234');
 	
@@ -34,13 +34,13 @@ The client's `get()`, `post()`, `put()` and `delete()` methods all accept a reso
 	]);
 	var_dump($response->data()); // => [...]
 	
-The `data()` method returns an array, the contents of which depends on the resource being called. Note you can pass a period-separated key to `data()` for quick access to an item in the array:
+The `data()` method returns an array, the contents of which depends on the resource being called. Note you can pass a period-separated key to `data()` for quick access to a nested item in the array:
 
 	echo $response->data('user.username');	//=> 'arya'
 
 ### Exceptions
 
-If something goes wrong, a subclass of `blipfoto\exceptions\BaseException` will be thrown. The type of exceptions are:
+If something goes wrong, a subclass of `Blipfoto\Exceptions\BaseException` will be thrown. The type of exceptions are:
 
 - `NetworkException`
 
@@ -62,7 +62,7 @@ If something goes wrong, a subclass of `blipfoto\exceptions\BaseException` will 
 
 By default, the client will authorize using App auth, i.e. just sending your app's client ID. To perform an action on behalf of a user, you'll need to obtain an access token for the user using OAuth 2.
 
-The `blipfoto\api\OAuth` class makes this easy. Create an instance of this class by passing in your Client instance and the authorize endpoint:
+The `Blipfoto\Api\OAuth` class makes this easy. Create an instance of this class by passing in your Client instance and the authorize endpoint:
 
 	$oauth = new OAuth($client, Client::URI_AUTHORIZE);
 	

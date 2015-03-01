@@ -146,11 +146,12 @@ class Request {
 		$raw_body = @curl_exec($this->curl);
 		$http_status = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
 		$error_code = curl_errno($this->curl);
+		$error_message = curl_error($this->curl);
 		@curl_close($this->curl);
 
 		// Check for curl error.
 		if ($error_code > 0) {
-			throw new NetworkException(curl_strerror($error_code), $error_code);
+			throw new NetworkException($error_message, $error_code);
 		}
 
 		return new Response($raw_body, $http_status, $rate_limit);

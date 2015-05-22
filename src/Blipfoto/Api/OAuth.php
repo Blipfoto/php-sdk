@@ -8,18 +8,15 @@ use Blipfoto\Exceptions\OAuthException;
 class OAuth {
 
 	protected $client;
-	protected $authorize_uri;
 	protected $oauth_key;
 
 	/**
 	 * Construct a new oauth instance.
 	 *
 	 * @param Client $client
-	 * @param string $authorize_url
 	 */
-	public function __construct(Client $client, $authorize_uri) {
+	public function __construct(Client $client) {
 		$this->client = $client;
-		$this->authorize_uri = $authorize_uri;
 		$this->oauth_key = Client::SESSION_PREFIX . 'params';
 
 		if (session_status() == PHP_SESSION_NONE) {
@@ -31,10 +28,10 @@ class OAuth {
 	 * Begin authorization.
 	 *
 	 * @param string $redirect_uri
-	 * @param string $scope
+	 * @param string $scope (optional)
 	 * @redirect
  	 */
-	public function authorize($redirect_uri, $scope) {
+	public function authorize($redirect_uri, $scope = Client::SCOPE_READ) {
 
 		$state = sha1(mt_rand());
 
@@ -44,7 +41,7 @@ class OAuth {
 			'state'			=> $state,
 		];
 
-		$url = $this->authorize_uri . '?' . http_build_query([
+		$url = $this->client->authorizationEndpoint() . '?' . http_build_query([
 			'response_type'	=> 'code',
 			'client_id'		=> $this->client->id(),
 			'client_secret' => $this->client->secret(),
@@ -80,10 +77,14 @@ class OAuth {
 	/**
 	 * Swap an authorization code for a token.
 	 *
-	 * @param string $authorization_code
+	 * @param string $authorization_code (optional)
 	 * @return array
 	 */
-	public function getToken($authorization_code) {
+	public function getToken($authorization_code = null) {
+
+		if ($authorization_code == null) {
+			$authorization_code = $this->getAuthorizationCode();
+		}
 
 		$params = $_SESSION[$this->oauth_key];
 		unset($_SESSION[$this->oauth_key]);

@@ -2,7 +2,9 @@
 
 namespace Blipfoto\Api;
 
+use Blipfoto\Exceptions\ApiResponseException;
 use Blipfoto\Exceptions\InvalidResponseException;
+use Blipfoto\Exceptions\OAuthException;
 use Blipfoto\Traits\Helper;
 
 class Response {
@@ -36,6 +38,15 @@ class Response {
 		$this->body = $decoded;
 		$this->http_status = $http_status;
 		$this->rate_limit = $rate_limit;
+
+		$error = $this->error();
+		if ($error !== null) {
+			if ($error['code'] >= 30 && $error['code'] <= 35) {
+				throw new OAuthException($error['message'], $error['code']);
+			} else {
+				throw new ApiResponseException($error['message'], $error['code']);
+			}
+		}
 	}
 
 	/**

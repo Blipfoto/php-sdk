@@ -2,6 +2,8 @@
 
 namespace Blipfoto\Api;
 
+use \ReflectionClass;
+use Blipfoto\Api\File;
 use Blipfoto\Exceptions\ApiResponseException;
 use Blipfoto\Exceptions\OAuthException;
 use Blipfoto\Traits\Helper;
@@ -13,18 +15,21 @@ class Client {
 	protected $id;
 	protected $secret;
 	protected $access_token;
-	protected $instance;
+	protected $endpoint;
+	protected $authorization_endpoint;
+	protected $before;
+	protected $after;
 
 	// Endpoint constants
-	const URI_API_ENDPOINT 		= 'https://api.polaroidblipfoto.com/4/';
-	const URI_AUTHORIZE 		= 'https://www.polaroidblipfoto.com/oauth/authorize/';
+	const URI_API 			= 'https://api.polaroidblipfoto.com/4/';
+	const URI_AUTHORIZE 	= 'https://www.polaroidblipfoto.com/oauth/authorize/';
 
 	// scope constants
-	const SCOPE_READ 			= 'read';
-	const SCOPE_READ_WRITE		= 'read,write';
+	const SCOPE_READ 		= 'read';
+	const SCOPE_READ_WRITE	= 'read,write';
 
 	// misc constants
-	const SESSION_PREFIX 		= 'polaroidblipfoto_';
+	const SESSION_PREFIX 	= 'polaroidblipfoto_';
 
 	/**
 	 * Create new Client instance.
@@ -70,51 +75,111 @@ class Client {
 	}
 
 	/**
-	 * Convenience method for sending a request and returning a response.
+	 * Get and optionally set the beforeRequest callback.
 	 *
-	 * @return Response
-	 * @throws OAuthException|ApiResponseException
+	 * @param callable $before (optional)
+	 * @return mixed
 	 */
-	protected function request($method, $args) {
-		$request = new Request($this, $method, $args[0], count($args) > 1 ? $args[1] : []);
-		$response = $request->send();
-		$error = $response->error();
-		if ($error !== null) {
-			if ($error['code'] >= 30 && $error['code'] <= 35) {
-				throw new OAuthException($error['message'], $error['code']);
-			} else {
-				throw new ApiResponseException($error['message'], $error['code']);
-			}
-		}
-		return $response;
+	public function before() {
+		return $this->getset('before', func_get_args());
+	}
+
+	/**
+	 * Get and optionally set the afterRequest callback.
+	 *
+	 * @param callable $after (optional)
+	 * @return mixed
+	 */
+	public function after() {
+		return $this->getset('after', func_get_args());
+	}
+
+	/**
+	 * Get and optionally set the endpoint.
+	 *
+	 * @param string $endpoint (optional)
+	 * @return string
+	 */
+	public function endpoint() {
+		$endpoint = $this->getset('endpoint', func_get_args());
+		return $endpoint ?: self::URI_API;
+	}
+
+	/**
+	 * Get and optionally set the authorization endpoint.
+	 *
+	 * @param string $authorization_endpoint (optional)
+	 * @return string
+	 */
+	public function authorizationEndpoint() {
+		$endpoint = $this->getset('authorization_endpoint', func_get_args());
+		return $endpoint ?: self::URI_AUTHORIZE;
+	}
+
+	/**
+	 * Convenience method for creating a new Request instance.
+	 *
+	 * @param mixed
+	 * @return Request
+	 */	
+	public function request() {
+		return new Request($this);
+	}
+
+	/**
+	 * Convenience method for creating a new OAuth instance.
+	 *
+	 * @return OAuth
+	 */
+	public function oauth() {
+		return new OAuth($this);
 	}
 
 	/**
 	 * Convenience method for creating and sending a new GET request.
 	 */
 	public function get() {
-		return $this->request('GET', func_get_args());
+		return $this->run('GET', func_get_args());
 	}
 
 	/**
 	 * Convenience method for creating and sending a new POST request.
 	 */
 	public function post() {
-		return $this->request('POST', func_get_args());
+		return $this->run('POST', func_get_args());
 	}
 
 	/**
 	 * Convenience method for creating and sending a new PUT request.
 	 */
 	public function put() {
-		return $this->request('PUT', func_get_args());
+		return $this->run('PUT', func_get_args());
 	}
 
 	/**
 	 * Convenience method for creating and sending a new DELETE request.
 	 */
 	public function delete() {
-		return $this->request('DELETE', func_get_args());
+		return $this->run('DELETE', func_get_args());
+	}
+
+	/**
+	 * Convenience method for sending a request and returning a response.
+	 *
+	 * @return Response
+	 * @throws OAuthException|ApiResponseException
+	 */
+	protected function run($method, $args) {
+		$request = $this->request();
+		$request->method($method);
+		$request->resource(array_shift($args));
+		if (count($args)) {
+			$request->params(array_shift($args));
+		}
+		if (count($args)) {
+			$request->files(array_shift($args));
+		}
+		return $request->send();
 	}
 
 }

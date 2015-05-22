@@ -111,7 +111,7 @@ class Request {
 	 */
 	public function url() {
 		$url = $this->client->endpoint() . $this->resource . '.json';
-		if ($this->method == 'GET' && $this->params !== null) {
+		if (in_array($this->method, ['GET', 'DELETE']) && $this->params !== null) {
 			$url .= '?' . http_build_query($this->params);
 		}
 		return $url;
@@ -129,8 +129,8 @@ class Request {
 
 		// Set fields for post or put requests.
 		$this->curl = curl_init();
-		if ($this->method == 'POST' || $this->method == 'PUT') {
-			curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, $this->method);
+		curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, $this->method);
+		if (in_array($this->method, ['POST', 'PUT'])) {
 			$this->buildBody();
 		} else {
 			$this->header('Content-Type', null);

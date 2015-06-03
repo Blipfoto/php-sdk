@@ -6,6 +6,7 @@ use \ReflectionClass;
 use Blipfoto\Api\File;
 use Blipfoto\Exceptions\ApiResponseException;
 use Blipfoto\Exceptions\OAuthException;
+use Blipfoto\Exceptions\NetworkException;
 use Blipfoto\Traits\Helper;
 
 class Client {
@@ -102,7 +103,7 @@ class Client {
 	 */
 	public function endpoint() {
 		$endpoint = $this->getset('endpoint', func_get_args());
-		return $endpoint ?: self::URI_API;
+		return $this->validateEndpoint($endpoint ?: self::URI_API);
 	}
 
 	/**
@@ -113,7 +114,7 @@ class Client {
 	 */
 	public function authorizationEndpoint() {
 		$endpoint = $this->getset('authorization_endpoint', func_get_args());
-		return $endpoint ?: self::URI_AUTHORIZE;
+		return $this->validateEndpoint($endpoint ?: self::URI_AUTHORIZE);
 	}
 
 	/**
@@ -180,6 +181,20 @@ class Client {
 			$request->files(array_shift($args));
 		}
 		return $request->send();
+	}
+
+	/**
+	 * Ensures that an endoint is valid.
+	 *
+	 * @param string $endpoint
+	 * @return string
+	 * @throws NetworkException
+	 */
+	protected function validateEndpoint($endpoint) {
+		if (!preg_match("/^https/", $endpoint)) {
+			throw new NetworkException(sprintf('Invalid endpoint "%s" does not use the HTTPS protocol.', $endpoint), -1);
+		}
+		return $endpoint;
 	}
 
 }

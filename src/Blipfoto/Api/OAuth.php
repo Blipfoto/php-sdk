@@ -23,7 +23,7 @@ class OAuth {
 		    session_start();
 		}
 	}
-
+	
 	/**
 	 * Begin authorization.
 	 *
@@ -32,6 +32,18 @@ class OAuth {
 	 * @redirect
  	 */
 	public function authorize($redirect_uri, $scope = Client::SCOPE_READ) {
+		header('Location: ' . $this->getAuthorizeUri($redirect_uri, $scope));
+		exit;
+	}
+	
+ 	/**
+	 * Generate and return the authorization URI.
+	 *
+	 * @param string $redirect_uri
+	 * @param string $scope (optional)
+	 * @return string
+ 	 */
+	public function getAuthorizeUri($redirect_uri, $scope = Client::SCOPE_READ) {
 
 		$state = sha1(mt_rand());
 
@@ -41,7 +53,7 @@ class OAuth {
 			'state'			=> $state,
 		];
 
-		$url = $this->client->authorizationEndpoint() . '?' . http_build_query([
+		return $this->client->authorizationEndpoint() . '?' . http_build_query([
 			'response_type'	=> 'code',
 			'client_id'		=> $this->client->id(),
 			'client_secret' => $this->client->secret(),
@@ -49,8 +61,6 @@ class OAuth {
 			'scope'			=> $scope,
 			'state'			=> $state,
 		]);
-		header('Location: ' . $url);
-		exit;
 	}
 
 	/**

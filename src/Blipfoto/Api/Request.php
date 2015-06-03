@@ -19,7 +19,6 @@ class Request {
 	protected $files;
 	protected $curl;
 	protected $headers;
-	protected $callback;
 
 	/**
 	 * Create new Client instance.
@@ -192,16 +191,6 @@ class Request {
 		}
 
 		return new Response($body, $http_status, $rate_limit);
-	}
-
-	/**
-	 * Assign a callback to be invoked immediately before the request is sent. The request handle
-	 * will be passed to the callback, allowing the handle to be modified.
-	 *
-	 * @param Closure $callback
-	 */
-	public function handle(Closure $callback) {
-		$this->callback = $callback;
 	}
 
 	/**

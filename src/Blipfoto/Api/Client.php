@@ -22,8 +22,8 @@ class Client {
 	protected $after;
 
 	// Endpoint constants
-	const URI_API 			= 'https://api.polaroidblipfoto.com/4/';
-	const URI_AUTHORIZE 	= 'https://www.polaroidblipfoto.com/oauth/authorize/';
+	const URI_API 			= 'https://api.blipfoto.com/4/';
+	const URI_AUTHORIZE 	= 'https://www.blipfoto.com/oauth/authorize/';
 
 	// scope constants
 	const SCOPE_READ 		= 'read';

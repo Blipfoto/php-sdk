@@ -1,11 +1,11 @@
 # Blipfoto PHP SDK
 
-The Blipfoto SDK for PHP lets you integreate easily with the Blipfoto API.
+The Blipfoto SDK for PHP lets you integrate easily with the Blipfoto API.
 
 ## Requirements
 
 - PHP 7.4.0 or greater
-- libcurl
+- ext-curl
 
 ## Installation
 
@@ -13,7 +13,7 @@ To install the SDK, we recommend using [Composer](https://getcomposer.org/). Jus
 
 	{
 		"require": {
-			"blipfoto/blipfoto": "dev-master"
+			"blipfoto/blipfoto": "^0.2"
 		}
 	}
 
@@ -45,7 +45,7 @@ To upload files during `post()` or `put()`, pass an array of parameters / file p
 	$response = $client->post('entry', [
 		'title' => 'Ser Bronn'
 	], [
-		'image => 'bronn.jpg'
+		'image' => 'bronn.jpg'
 	]);
 
 ## Exceptions
@@ -66,7 +66,7 @@ If something goes wrong, a subclass of `Blipfoto\Exceptions\BaseException` will 
 	
 - `OAuthException`
 
-	Thrown when OAuth is misconfigured or the user denies permisson to your app during the auth flow.
+	Thrown when OAuth is misconfigured or the user denies permission to your app during the auth flow.
 	
 - `ApiResponseException`
 
@@ -86,6 +86,7 @@ Now call `authorize()`, passing in the `redirect_uri` in your app settings, and 
 	
 The user can now grant or deny app permissions, and will be taken back to your `redirect_uri`. On this page, we create the OAuth instance as before, obtain the access token and store it on the client:
 
+	use Blipfoto\Exceptions\OAuthException;
 	$oauth = $client->oauth();
 	try {
 		$token = $oauth->getToken();

@@ -9,6 +9,7 @@ use Blipfoto\Exceptions\OAuthException;
 use Blipfoto\Storage\MemoryStore;
 use Blipfoto\Tests\Support\TestServerTrait;
 use PHPUnit\Framework\TestCase;
+use Blipfoto\Api\OAuth;
 
 final class OAuthTest extends TestCase
 {
@@ -164,7 +165,7 @@ final class OAuthTest extends TestCase
     {
         $store = new MemoryStore();
         $client = $this->makeClient();
-        $oauth = $client->oauth($store);
+        $oauth = new OAuth($client, $store);
 
         $uri = $oauth->getAuthorizeUri('https://example.test/callback');
         parse_str(parse_url($uri, PHP_URL_QUERY), $params);

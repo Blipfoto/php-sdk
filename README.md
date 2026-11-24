@@ -4,7 +4,7 @@ The Blipfoto SDK for PHP lets you integreate easily with the Blipfoto API.
 
 ## Requirements
 
-- PHP 5.4.0 or greater
+- PHP 7.4.0 or greater
 - libcurl
 
 ## Installation

@@ -6,12 +6,22 @@
 	"homepage": "https://www.blipfoto.com/developer",
 	"license": "MIT",
 	"require": {
-		"php": ">=5.4.0",
+		"php": ">=7.4",
 		"ext-curl": "*"
 	},
+	"require-dev": {
+		"phpunit/phpunit": "^9.6",
+		"ext-gd": "*",
+		"ext-openssl": "*"
+	},
 	"autoload": {
-		"psr-0": {
-			"Blipfoto": "src"
+		"psr-4": {
+			"Blipfoto\\": "src/Blipfoto"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Blipfoto\\Tests\\": "tests"
 		}
 	}
 }

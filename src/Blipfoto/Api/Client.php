@@ -8,6 +8,7 @@ use Blipfoto\Exceptions\ApiResponseException;
 use Blipfoto\Exceptions\OAuthException;
 use Blipfoto\Exceptions\NetworkException;
 use Blipfoto\Traits\Helper;
+use Blipfoto\Storage\StateStore;
 
 class Client {
 
@@ -130,10 +131,11 @@ class Client {
 	/**
 	 * Convenience method for creating a new OAuth instance.
 	 *
+	 * @param StateStore|null $store (optional) where to keep OAuth state; defaults to PHP's native session
 	 * @return OAuth
 	 */
-	public function oauth() {
-		return new OAuth($this);
+	public function oauth(?StateStore $store = null) {
+		return new OAuth($this, $store);
 	}
 
 	/**

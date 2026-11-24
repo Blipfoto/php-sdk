@@ -64,7 +64,7 @@ class Response {
 	 * @return array|null
 	 */
 	public function error() {
-		return $this->body['error'];
+		return $this->body['error'] ?? null;
 	}
 
 	/**

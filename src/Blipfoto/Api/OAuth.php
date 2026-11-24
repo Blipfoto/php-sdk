@@ -22,8 +22,20 @@ class OAuth {
 	 */
 	public function __construct(Client $client, ?StateStore $store = null) {
 		$this->client = $client;
-		$this->store = $store ?? new NativeSessionStore();
 		$this->oauth_key = Client::SESSION_PREFIX . 'params';
+
+		if ($store === null) {
+			$store = new NativeSessionStore();
+
+			// Keep the original SDK's behaviour: start the session as soon as OAuth is
+			// created, so it's already running if the page prints output before the
+			// login link is built. Apps may also rely on the SDK having started it.
+			if (session_status() === PHP_SESSION_NONE) {
+				session_start();
+			}
+		}
+
+		$this->store = $store;
 	}
 
 	/**
@@ -107,7 +119,7 @@ class OAuth {
 	 */
 	public function getToken($authorization_code = null) {
 
-		if ($authorization_code === null) {
+		if ($authorization_code == null) {
 			$authorization_code = $this->getAuthorizationCode();
 		}
 
